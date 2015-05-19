@@ -1,0 +1,11 @@
+{
+  "autoload": {
+	"psr-4": {
+	  "Myth\\Docs\\": "src"
+	}
+  },
+  "require": {
+	"php": ">=5.4",
+	"league/commonmark": "0.8.*@dev"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "title": "myth:Docs Documentation",
+  "theme": "default",
+  "main_layout": "main",
+  "nav_layout": "nav",
+  "search_results_layout": "search_results",
+  "collections": {
+	  "developer": {
+		"title": "myth:Docs",
+		"tagline": "myth:Docs Documentation",
+		"visible": true,
+		"docs_directory": "docs"
+	  },
+		"sprint": {
+		  "title": "Sprint",
+		  "tagline": "Sprint Developer Docs",
+		  "visible": true,
+		  "docs_directory": "/Volumes/MyData/WebSites/Sprint PHP/myth/_docs_src"
+		}
+	}
+}
