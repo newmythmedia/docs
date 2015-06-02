@@ -4,7 +4,7 @@
   "main_layout": "main",
   "nav_layout": "nav",
   "search_results_layout": "search_results",
-  "collections": {
+  "collections": [
 	  "developer": {
 		"title": "myth:Docs",
 		"tagline": "myth:Docs Documentation",
@@ -17,5 +17,5 @@
 		  "visible": true,
 		  "docs_directory": "/Volumes/MyData/WebSites/Sprint PHP/myth/_docs_src"
 		}
-	}
+	]
 }
