@@ -157,6 +157,13 @@ class Builder {
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Given a URI string, will determine what the active collection is
+	 * by comparing each URI segment with the names of our collections.
+	 *
+	 * @param $uri
+	 * @return null
+	 */
 	public function determineActiveCollection( $uri )
 	{
 		$segments = explode('/', $uri);
@@ -169,9 +176,19 @@ class Builder {
 			return null;
 		}
 
-		var_dump($segments);
+		$collection_names = array_keys($this->collections);
 
-	    die(var_dump($uri));
+		foreach ($segments as $s)
+		{
+			if (in_array(strtolower($s), $collection_names ) )
+			{
+				$this->active_collection = $s;
+
+			    return $s;
+			}
+		}
+
+		return null;
 	}
 
 	//--------------------------------------------------------------------

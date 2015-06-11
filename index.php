@@ -24,7 +24,11 @@ $config = json_decode($config);
 
 $builder = new Myth\Docs\Builder($config);
 
-if ( is_null($builder->determineActiveCollection( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] )) )
+$collection = $builder->determineActiveCollection( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+
+// No active collection in the URL name? Then redirect us to
+// the default collection.
+if ( is_null($collection) )
 {
 	$url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . $builder->default_collection;
 
