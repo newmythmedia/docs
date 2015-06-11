@@ -45,7 +45,7 @@ if ( is_null($collection) )
 
 $path = ! empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PATH_INFO'];
 
-$output = $builder->buildPage($path);
+$output = $builder->buildPage($path, $collection);
 
 if (empty($output))
 {

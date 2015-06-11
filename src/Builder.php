@@ -91,6 +91,9 @@ class Builder {
 			throw new \InvalidArgumentException('Non-existing or invalid collection called with buildPage.');
 		}
 
+		// Strip the collection name from the page name
+		$page = str_ireplace($collection, '', $page);
+
 		$collection = $this->collections[$collection];
 		$content = $collection->getPage($page);
 
