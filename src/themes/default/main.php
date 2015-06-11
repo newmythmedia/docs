@@ -47,7 +47,7 @@
 	            <?php if (isset($collection_names) && is_array($collection_names)) : ?>
 	                <?php foreach ($collection_names as $collection) : ?>
 	                <li>
-		                <a href="#"><?= ucfirst(strtolower($collection)) ?></a>
+		                <a href="/<?= $collection ?>"><?= ucfirst(strtolower($collection)) ?></a>
 	                </li>
 	                <?php endforeach; ?>
 	            <?php endif; ?>
