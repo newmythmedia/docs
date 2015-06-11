@@ -63,6 +63,8 @@ class Collection {
 		'md'   => 'markdown'
 	];
 
+	protected $base_url;
+
 	//--------------------------------------------------------------------
 
 	public function __construct($config)
@@ -139,6 +141,13 @@ class Collection {
 
 	//--------------------------------------------------------------------
 
+	public function setBaseURL($url)
+	{
+	    $this->baseURL = $url;
+	}
+
+	//--------------------------------------------------------------------
+
 
 
 	//--------------------------------------------------------------------
@@ -165,10 +174,10 @@ class Collection {
 		$str = str_replace('.md', '', $str);
 
 		// Convert underscore to space
-		$str = str_replace('_', ' ', $str);
+//		$str = str_replace('_', ' ', $str);
 
 		// Change case
-		$str = ucwords( strtolower($str) );
+//		$str = ucwords( strtolower($str) );
 
 		return $str;
 	}

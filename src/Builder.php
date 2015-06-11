@@ -47,6 +47,14 @@ class Builder {
 	protected $nav_layout;
 	protected $search_results_layout;
 
+	/**
+	 * The first portion of any URI's generated.
+	 * Must be supplied by the user.
+	 *
+	 * @var
+	 */
+	protected $base_url;
+
 
 	//--------------------------------------------------------------------
 
@@ -95,6 +103,7 @@ class Builder {
 		$page = str_ireplace($collection, '', $page);
 
 		$collection = $this->collections[$collection];
+		$collection->setBaseURL($this->base_url);
 		$content = $collection->getPage($page);
 
 		/*
@@ -144,7 +153,8 @@ class Builder {
 		$data = [
 			'title' => $this->title,
 			'site_name' => $this->site_title,
-		    'links' => $collection->getLinks()
+		    'links' => $collection->getLinks(),
+		    'builder' => $this
 		];
 		extract($data);
 
@@ -195,6 +205,22 @@ class Builder {
 	}
 
 	//--------------------------------------------------------------------
+
+	/**
+	 * Stores our base URL to use when generating links.
+	 *
+	 * @param $url
+	 * @return $this
+	 */
+	public function setBaseURL($url)
+	{
+	    $this->base_url = $url;
+
+		return $this;
+	}
+
+	//--------------------------------------------------------------------
+
 
 
 

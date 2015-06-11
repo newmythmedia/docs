@@ -17,7 +17,7 @@
 			<ul class="nav nav-stacked">
 			<?php foreach ($files as $file) : ?>
 				<li>
-					<a href="<?= $file ?>"><?= $file ?></a>
+					<a href="<?= $builder->base_url . $builder->active_collection .'/'. $folder .'/'. $file ?>"><?= ucwords( str_replace('_', ' ', $file) ) ?></a>
 				</li>
 			<?php endforeach; ?>
 			</ul>

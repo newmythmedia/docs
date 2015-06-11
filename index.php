@@ -24,26 +24,30 @@ $config = json_decode($config);
 
 $builder = new Myth\Docs\Builder($config);
 
-$collection = $builder->determineActiveCollection( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
+$path = ! empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PATH_INFO'];
+
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443 ? 'https://' : 'http://';
+
+$collection = $builder->determineActiveCollection( $_SERVER['HTTP_HOST'] . $path);
 
 // No active collection in the URL name? Then redirect us to
 // the default collection.
 if ( is_null($collection) )
 {
-	$url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . $builder->default_collection;
-
-	// Using HTTPS?
-	$url = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443 ? 'https://'. $url : 'http://'. $url;
+	$url = $protocol . $_SERVER['HTTP_HOST'] . $path . $builder->default_collection;
 
 	header("Location: {$url}");
 	die();
 }
 
+$base_url = $protocol . $_SERVER['HTTP_HOST'] . $path;
+$base_url = substr($base_url, 0, strpos($base_url, $collection));
+
+$builder->setBaseURL($base_url);
+
 //--------------------------------------------------------------------
 // Display the chosen page
 //--------------------------------------------------------------------
-
-$path = ! empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PATH_INFO'];
 
 $output = $builder->buildPage($path, $collection);
 
