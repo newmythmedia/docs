@@ -105,11 +105,77 @@ class Collection {
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Scans the collection's directories and builds a map
+	 * of the folders and files.
+	 */
+	public function getLinks($dir=null)
+	{
+		$result = array();
+
+		if (empty($dir))
+		{
+			$dir = $this->docs_directory;
+		}
+
+		$cdir = scandir($dir);
+		foreach ($cdir as $key => $value)
+		{
+			if (! in_array($value, array(".","..",".DS_Store")))
+			{
+				if (is_dir($dir . DIRECTORY_SEPARATOR . $value))
+				{
+					$result[ $this->prepareLinkName($value) ] = $this->getLinks($dir . DIRECTORY_SEPARATOR . $value);
+				}
+				else
+				{
+					$result[] = $this->prepareLinkName($value);
+				}
+			}
+		}
+
+		return $result;
+	}
+
+	//--------------------------------------------------------------------
+
 
 
 	//--------------------------------------------------------------------
 	// Protected Methods
 	//--------------------------------------------------------------------
+
+	/**
+	 * Cleans up a link text so that it's ready to be displayed.
+	 *
+	 *      - Removes any number + _ prefix (01_)
+	 *      - Converts underscore to spaces
+	 *      - unwords
+	 *
+	 * @param $str
+	 */
+	protected function prepareLinkName($str)
+	{
+		if (empty($str)) return $str;
+
+		// Strip numeric prefixes
+		$str = preg_replace('/^[0-9]+_/', '', $str);
+
+		// Remove file suffix
+		$str = str_replace('.md', '', $str);
+
+		// Convert underscore to space
+		$str = str_replace('_', ' ', $str);
+
+		// Change case
+		$str = ucwords( strtolower($str) );
+
+		return $str;
+	}
+
+	//--------------------------------------------------------------------
+
+
 
 	/**
 	 * Parses our config object to get our needed settings.

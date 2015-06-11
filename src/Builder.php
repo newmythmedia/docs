@@ -9,10 +9,29 @@ class Builder {
 	protected $title;
 
 	/**
+	 * Overall site title
+	 * @var
+	 */
+	protected $site_title;
+
+	/**
 	 * Doc Collections
 	 * @var array
 	 */
 	protected $collections = [];
+
+	/**
+	 * The name of the default collection to show
+	 * if none is specified.
+	 * @var
+	 */
+	protected $default_collection;
+
+	/**
+	 * The name of the currently active collection.
+	 * @var
+	 */
+	protected $active_collection;
 
 	/**
 	 * The theme to use.
@@ -73,11 +92,21 @@ class Builder {
 		}
 
 		$collection = $this->collections[$collection];
+		$content = $collection->getPage($page);
 
 		/*
 		 * Grab our template file.
 		 */
 		$template_path = dirname(__FILE__) .'/themes/'. $this->theme .'/'. $this->main_layout .'.php';
+
+		// Compile data to make available to the view
+		$data = [
+			'title' => $this->title,
+		    'site_name' => $this->site_title,
+		    'collection_names' => array_keys($this->collections),
+		    'sidebar' => $this->buildCollectionMenu($collection)
+		];
+		extract($data);
 
 		ob_start();
 
@@ -89,7 +118,7 @@ class Builder {
 		/*
 		 * Insert our page.
 		 */
-		$output = str_ireplace('{contents}', $collection->getPage($page), $output);
+		$output = str_ireplace('{contents}', $content, $output);
 
 		return $output;
 	}
@@ -103,7 +132,46 @@ class Builder {
 	 */
 	public function buildCollectionMenu($collection)
 	{
+		/*
+		 * Grab our template file.
+		 */
+		$template_path = dirname(__FILE__) .'/themes/'. $this->theme .'/'. $this->nav_layout .'.php';
 
+		// Compile data to make available to the view
+		$data = [
+			'title' => $this->title,
+			'site_name' => $this->site_title,
+		    'links' => $collection->getLinks()
+		];
+		extract($data);
+
+		ob_start();
+
+		include($template_path);
+
+		$output = ob_get_contents();
+		@ob_end_clean();
+
+		return $output;
+	}
+
+	//--------------------------------------------------------------------
+
+	public function determineActiveCollection( $uri )
+	{
+		$segments = explode('/', $uri);
+
+		// We know that our first segment won't be a collection name
+		array_shift($segments);
+
+		if (! count($segments) || empty($segments[0]) )
+		{
+			return null;
+		}
+
+		var_dump($segments);
+
+	    die(var_dump($uri));
 	}
 
 	//--------------------------------------------------------------------
@@ -144,20 +212,26 @@ class Builder {
 			$this->collections[$name] = new Collection($c);
 		}
 
+		// Default Collection
+		$this->default_collection = ! empty($config->default_collection) ? $config->default_collection : null;
+
 		// Title
 		$this->title = ! empty($config->title) ? $config->title : null;
 
+		// Site Title
+		$this->site_title = ! empty($config->site_title) ? $config->site_title : null;
+
 		// Theme
-		$this->theme = ! empty($config->theme) ? $config->theme : null;
+		$this->theme = ! empty($config->theme) ? $config->theme : 'default';
 
 		// Layout
-		$this->main_layout = ! empty($config->main_layout) ? $config->main_layout : null;
+		$this->main_layout = ! empty($config->main_layout) ? $config->main_layout : 'main';
 
 		// Nav Layout
-		$this->nav_layout = ! empty($config->nav_layout) ? $config->nav_layout : null;
+		$this->nav_layout = ! empty($config->nav_layout) ? $config->nav_layout : 'nav';
 
 		// Search Results Layout
-		$this->search_results_layout = ! empty($config->search_results_layout) ? $config->search_results_layout : null;
+		$this->search_results_layout = ! empty($config->search_results_layout) ? $config->search_results_layout : 'search_results';
 	}
 
 	//--------------------------------------------------------------------

@@ -24,6 +24,17 @@ $config = json_decode($config);
 
 $builder = new Myth\Docs\Builder($config);
 
+if ( is_null($builder->determineActiveCollection( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] )) )
+{
+	$url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . $builder->default_collection;
+
+	// Using HTTPS?
+	$url = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443 ? 'https://'. $url : 'http://'. $url;
+
+	header("Location: {$url}");
+	die();
+}
+
 //--------------------------------------------------------------------
 // Display the chosen page
 //--------------------------------------------------------------------
