@@ -1,0 +1,44 @@
+.sidebar {
+    border-right: 1px solid #eee;
+    padding-left: 0;
+}
+
+    .sidebar h3 {
+        font-weight: normal;
+        font-size: 1.75rem;
+        margin-top: 2.5rem;
+    }
+    .sidebar h3:first-child {
+        margin-top: 0;
+    }
+
+    .sidebar ul a {
+        padding: 0 15px 0 0;
+        line-height: 1.6;
+    }
+    .sidebar ul a:hover {
+        background-color: inherit;
+        text-decoration: underline;
+    }
+
+.footer .container {
+    margin-top: 3rem;
+    border-top: 1px solid #eeeeee;
+    padding: 3rem;
+}
+
+.main {
+    padding: 0 3rem 3rem 3rem;
+}
+
+    .main h1:first-child {
+        padding-top: 0;
+        margin-top: 0;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 30px;
+        padding-bottom: 12px;
+    }
+
+.outer-wrap {
+    padding-top: 1rem;
+}
