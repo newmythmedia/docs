@@ -1,5 +1,6 @@
 {
   "title": "myth:Docs Documentation",
+  "site_title": "myth:Docs",
   "theme": "default",
   "main_layout": "main",
   "nav_layout": "nav",
@@ -17,5 +18,6 @@
 	  "visible": true,
 	  "docs_directory": "/Volumes/MyData/WebSites/Sprint PHP/myth/_docs_src"
 	}
-  }
+  },
+  "default_collection": "developer"
 }
