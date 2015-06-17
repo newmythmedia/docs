@@ -91,7 +91,7 @@ class Collection {
 			$page = 'index';
 		}
 
-		$path = $this->docs_directory .'/'. $page;
+		$path = $this->docs_directory .'/*'. $page;
 
 		$file = $this->getFileInfo($path);
 
@@ -216,7 +216,7 @@ class Collection {
 	 */
 	protected function getFileInfo($path)
 	{
-		$files = glob($path .'.*');
+		$files = glob("{$path}.*");
 
 		if (! is_array($files) || (is_array($files) && ! count($files)) )
 		{
