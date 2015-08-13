@@ -86,8 +86,6 @@ class Builder {
 	 */
 	public function buildPage($page, $collection=null)
 	{
-		$output = '';
-
 		/*
 		 * Grab the correct collection.
 		 */
