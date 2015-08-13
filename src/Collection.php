@@ -86,6 +86,12 @@ class Collection {
 
 		$page = trim($page, '/');
 
+        if (strpos($page, 'index.php') === 0)
+        {
+            $page = str_replace('index.php', '', $page);
+            $page = trim($page, '/');
+        }
+
 		if (empty($page))
 		{
 			$page = 'index';

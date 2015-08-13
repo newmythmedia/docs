@@ -22,7 +22,7 @@ if (empty($config))
 
 $config = json_decode($config);
 
-$builder = new Myth\Docs\Builder($config);
+$builder = new Myth\Docs\Builder($config, new \Myth\Docs\SimplePresenter());
 
 $path = ! empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : $_SERVER['PATH_INFO'];
 

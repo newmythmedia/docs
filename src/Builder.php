@@ -55,6 +55,7 @@ class Builder {
 	 */
 	protected $base_url;
 
+	protected $presenter;
 
 	//--------------------------------------------------------------------
 
@@ -63,7 +64,7 @@ class Builder {
 	 *
 	 * @param null $config
 	 */
-	public function __construct($config=null)
+	public function __construct($config=null, PresenterInterface $presenter)
 	{
 		if (empty($config) || ! is_object($config))
 		{
@@ -71,6 +72,8 @@ class Builder {
 		}
 
 	    $this->setup($config);
+
+		$this->presenter =& $presenter;
 	}
 
 	//--------------------------------------------------------------------
@@ -104,7 +107,9 @@ class Builder {
 
 		$collection = $this->collections[$collection];
 		$collection->setBaseURL($this->base_url);
+
 		$content = $collection->getPage($page);
+		$content = $this->presenter->postProcessPage($content);
 
 		/*
 		 * Grab our template file.
