@@ -107,7 +107,14 @@ class Builder {
 		$collection->setBaseURL($this->base_url);
 
 		$content = $collection->getPage($page);
-		$content = $this->presenter->postProcessPage($content);
+
+        $site_url    = 'http://'. $_SERVER['HTTP_HOST'];
+        $current_url = $site_url . $_SERVER['REQUEST_URI'];
+
+		$content = $this->presenter->setCurrentURL($current_url)
+                                    ->setSiteURL($site_url)
+                                    ->setCollections($this->collections)
+                                    ->postProcessPage($content);
 
 		/*
 		 * Grab our template file.
