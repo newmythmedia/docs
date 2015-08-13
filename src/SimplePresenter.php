@@ -145,7 +145,7 @@ class SimplePresenter implements PresenterInterface {
 
         foreach ($map as $item)
         {
-            $list .= "<li><a href='{$item['link']}'>{$item['name']}</a>";
+            $list .= "<li><b><a href='{$item['link']}'>{$item['name']}</a></b>";
 
             if (! empty($item['items']))
             {
