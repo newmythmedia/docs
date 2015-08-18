@@ -65,6 +65,21 @@ class Collection {
 
 	protected $base_url;
 
+    /**
+     * Availalbe versions.
+     *
+     * @var array
+     */
+    protected $versions = [];
+
+    /**
+     * The current version string.
+     * Matches folder name.
+     *
+     * @var
+     */
+    protected $current_version;
+
 	//--------------------------------------------------------------------
 
 	public function __construct($config)
@@ -203,7 +218,8 @@ class Collection {
 
 		$this->tagline = ! empty($config->tagline) ? $config->tagline : null;
 
-		$this->docs_directory = ! empty($config->docs_directory) ? realpath($config->docs_directory) : null;
+//		$this->docs_directory = ! empty($config->docs_directory) ? realpath($config->docs_directory) : null;
+        $this->docs_directory = $this->determineDocsDirectory( $config->docs_directory );
 
 		if (isset($config->visible)) $this->visible = (bool)$config->visible;
 
@@ -286,6 +302,74 @@ class Collection {
 	}
 
 	//--------------------------------------------------------------------
+
+    /**
+     * Scans the given folder, determines available and current versions,
+     * and sets the main doc folder.
+     *
+     * @param $root_path
+     */
+    protected function determineDocsDirectory($root_path)
+    {
+        $root_path = ! empty($root_path) ? realpath($root_path) : null;
+
+        if (empty($root_path))
+        {
+            return null;
+        }
+
+        $versions = $this->scanForVersions($root_path);
+
+        if (! empty($versions))
+        {
+            $this->versions = $versions;
+
+            // Set a default current version here.
+            $current = array_keys($versions);
+            $current = array_pop($current);
+
+            $this->current_version = $current;
+        }
+
+        // @todo - determine the current version from the URI
+
+        return rtrim($root_path, '/') .'/v'. $this->current_version .'/';
+    }
+
+    //--------------------------------------------------------------------
+
+    /**
+     * Scans a directory for any folders with starting the letter
+     * 'v' followed by a number. These are considered to be versions
+     * of the docs.
+     *
+     * @param $path
+     */
+    public function scanForVersions($path)
+    {
+        $files = glob("{$path}/*");
+
+        if (empty($files)) return null;
+
+        $versions = [];
+
+        foreach ($files as $name)
+        {
+            $name = trim( str_replace($path, '', $name), '/');
+
+            if (strpos($name, 'v') === 0 && is_numeric(substr($name, 1, 1)))
+            {
+                $versions[substr($name, 1)] = $path .'/'. $name .'/';
+            }
+        }
+
+        ksort($versions);
+
+        return $versions;
+    }
+
+    //--------------------------------------------------------------------
+
 
 
 }
