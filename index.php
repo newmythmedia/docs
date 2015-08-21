@@ -34,7 +34,7 @@ $collection = $builder->determineActiveCollection( $_SERVER['HTTP_HOST'] . $path
 // the default collection.
 if ( is_null($collection) )
 {
-	$url = $protocol . $_SERVER['HTTP_HOST'] . $path . $builder->default_collection;
+	$url = $protocol . $_SERVER['HTTP_HOST'] . $path . $builder->default_collection .'/';
 
 	header("Location: {$url}");
 	die();

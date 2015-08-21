@@ -53,6 +53,23 @@
 	            <?php endif; ?>
 
             </ul>
+
+			  <?php if (! empty($versions)) : ?>
+				  <ul class="nav navbar-nav navbar-right">
+				    <li class="dropdown">
+					    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+					       aria-expanded="false"><?= $current_version ?> <span class="caret"></span></a>
+
+					    <ul class="dropdown-menu">
+							<?php foreach ($versions as $v => $path) : ?>
+								<li><a href="<?= 'http://'. $_SERVER['HTTP_HOST'] .'/'. $collection .'/'. $v ?>" class="version-link"><?= $v ?></a></li>
+							<?php endforeach; ?>
+					    </ul>
+
+					    </select>
+				    </li>
+				  </ul>
+			  <?php endif; ?>
 		  </div>
 
 	  </div>
@@ -70,7 +87,6 @@
 			{contents}
 		</div>
 
-
 	</div>
 
 
@@ -81,5 +97,18 @@
 		</div>
 	</div>
 
+	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script>
+		$('a.version-link').click(function(e){
+			e.preventDefault();
+
+			var _url = $(this).prop('href');
+
+			window.location.href=_url;
+
+			return false;
+		});
+	</script>
 </body>
 </html>

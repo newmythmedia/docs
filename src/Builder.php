@@ -126,7 +126,10 @@ class Builder {
 			'title' => $this->title,
 		    'site_name' => $this->site_title,
 		    'collection_names' => array_keys($this->collections),
-		    'sidebar' => $this->buildCollectionMenu($collection)
+		    'sidebar' => $this->buildCollectionMenu($collection),
+		    'versions'  => $collection->getVersions(),
+		    'current_version' => $collection->getCurrentVersion(),
+		    'collection' => $collection
 		];
 		extract($data);
 

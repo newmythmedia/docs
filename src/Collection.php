@@ -162,6 +162,22 @@ class Collection {
 
 	//--------------------------------------------------------------------
 
+	public function getVersions()
+	{
+	    return $this->versions;
+	}
+
+	//--------------------------------------------------------------------
+
+	public function getCurrentVersion()
+	{
+	    return $this->current_version;
+	}
+
+	//--------------------------------------------------------------------
+
+
+
 	public function setBaseURL($url)
 	{
 	    $this->baseURL = $url;
