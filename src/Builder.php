@@ -123,7 +123,7 @@ class Builder {
 
 		// Compile data to make available to the view
 		$data = [
-			'title' => $this->title,
+			'title' => $this->collections[$this->active_collection]->tagline,
 		    'site_name' => $this->site_title,
 		    'collection_names' => array_keys($this->collections),
 		    'sidebar' => $this->buildCollectionMenu($collection),
