@@ -109,12 +109,21 @@ class Collection {
 
 		if (empty($page))
 		{
-			$page = 'index';
+			$page = '';
+			$name = 'index';
 		}
 
-		$path = $this->docs_directory .'/*'. $page;
+		// Ensure that we can get numbered filenames
+		$pos = strrpos($page, '/');
+		if ($pos)
+		{
+			$name = substr($page, $pos + 1);
+			$page = substr($page, 0, $pos);
+		}
 
-		$file = $this->getFileInfo($path);
+		$path = $this->docs_directory . $page;
+
+		$file = $this->getFileInfo($path, $name);
 
 		if (is_null($file))
 		{
@@ -252,35 +261,71 @@ class Collection {
 	 * @param $path
 	 * @return null
 	 */
-	protected function getFileInfo($path)
+	protected function getFileInfo($path, $filename)
 	{
-		$files = glob("{$path}.*");
+		$path = $this->getRealPath($path);
 
-		if (! is_array($files) || (is_array($files) && ! count($files)) )
+		if (! is_dir($path))
+		{
+			throw new \Exception($path .' is not a valid directory.');
+		}
+
+		$file = $this->getRealFilename($path, $filename);
+
+		if (empty($file)) return null;
+
+		$fileinfo = null;
+
+		$info = pathinfo($file);
+
+		if (! array_key_exists( $info['extension'], $this->parsers ))
 		{
 			return null;
 		}
 
-		$file = null;
+		$fileinfo = $info;
 
-		foreach ($files as $f)
+		$fileinfo['parser'] = $this->parsers[ $info['extension'] ];
+
+		return $fileinfo;
+	}
+
+	//--------------------------------------------------------------------
+
+	protected function getRealPath($path)
+	{
+		if (is_dir($path)) return $path;
+
+		// Remove the last element so we can glob the folder...
+		$last = substr($path, strrpos($path, '/') + 1);
+
+		if (! empty($last))
 		{
-			$info = pathinfo($f);
-
-			if (! array_key_exists( $info['extension'], $this->parsers ))
-			{
-				continue;
-			}
-
-			$file = $info;
-
-			$file['parser'] = $this->parsers[ $info['extension'] ];
-
-			unset($info);
-			break;
+			$path = str_replace($last, '[0-9][0-9]_'.$last, $path);
 		}
 
-		return $file;
+		$list = glob($path .'*');
+
+		if (empty($list)) return null;
+
+		return realpath($list[0]);
+	}
+
+	//--------------------------------------------------------------------
+
+	protected function getRealFilename($path, $filename)
+	{
+		foreach ([$filename, '[0-9][0-9]_'. $filename] as $file)
+		{
+			$list = glob($path .'/'. $file .'*');
+
+			if (is_array($list) && ! empty($list))
+			{
+				return $list[0];
+			}
+		}
+
+		return null;
 	}
 
 	//--------------------------------------------------------------------
